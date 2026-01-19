@@ -5,6 +5,13 @@ export type SocialLinks = {
   website?: string
 }
 
+export type ContributionLink = {
+  platform: string
+  handle?: string
+  url: string
+  note?: string
+}
+
 export type Bridesmaid = {
   id: string
   name: string
@@ -31,6 +38,25 @@ export const partyInfo = {
     'Friday night neon dinner and drag show downtown',
     'Saturday golden-hour photos + rooftop toast',
     'Sunday slow brunch send-off with Polaroids',
+  ],
+  contributionLinks: [
+    {
+      platform: 'Venmo',
+      handle: '@Siobhan-Quirke',
+      url: 'https://venmo.com/u/Siobhan-Quirke',
+      note: 'Preferred for quick cheers and notes.',
+    },
+    {
+      platform: 'Cash App',
+      handle: '$LenaMonroe',
+      url: 'https://cash.app/$LenaMonroe',
+    },
+    {
+      platform: 'PayPal',
+      handle: 'paypal.me/lenamonroe',
+      url: 'https://paypal.me/lenamonroe',
+      note: 'Use “Friends & Family” if prompted.',
+    },
   ],
 }
 

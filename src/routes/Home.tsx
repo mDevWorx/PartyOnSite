@@ -34,14 +34,9 @@ const Home = () => {
 
         <div className="hero-cta">
           <div className="cta-buttons">
-            <a
-              className="primary-button"
-              href={partyInfo.drinkLink}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <Link className="primary-button" to="/toast">
               Buy the bride a drink
-            </a>
+            </Link>
             <a className="ghost-button" href="#crew">
               Meet the crew
             </a>
@@ -128,14 +123,9 @@ const Home = () => {
             below. We&apos;ll surprise her during golden hour and share the cheers.
           </p>
           <div className="cta-buttons">
-            <a
-              className="primary-button"
-              href={partyInfo.drinkLink}
-              target="_blank"
-              rel="noreferrer"
-            >
+            <Link className="primary-button" to="/toast">
               Buy the bride a drink
-            </a>
+            </Link>
             <a className="ghost-button" href="#top">
               Back to top
             </a>
