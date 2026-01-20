@@ -27,7 +27,7 @@ export const brideProfile: Bridesmaid = {
   name: 'Siobhan Quirke',
   role: 'Bride',
   bio: 'Obviously taken',
-  image: 'shibby.png',
+  image: '/shibby.png',
   socials: {
     instagram: 'https://instagram.com/shibbyy_q',
     threads: 'https://www.threads.net/@sophia.lee',
@@ -115,8 +115,7 @@ export const bridesmaids: Bridesmaid[] = [
     name: 'Laura Hohl',
     role: 'Bridesmaid',
     bio: 'Known for drinking a little too much, lending out half her wardrobe, and believing every song deserves to be played at full volume',
-    image:
-      'laura.png',
+    image: '/laura.png',
     socials: {
       instagram: 'https://instagram.com/llaurahohl',
     },
