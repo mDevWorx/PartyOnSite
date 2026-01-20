@@ -50,6 +50,23 @@
   z-index: 1;
 }
 
+.data-status {
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(70, 43, 50, 0.08);
+  color: #46323a;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.data-status.error {
+  background: rgba(246, 90, 131, 0.18);
+  color: #7c1f3f;
+}
+
 .eyebrow {
   letter-spacing: 0.08em;
   text-transform: uppercase;

@@ -98,16 +98,16 @@ export const bridesmaids: Bridesmaid[] = [
     vibe: 'Disco ball meets color-coded itinerary.',
   },
   {
-    id: 'maya-estrada',
-    name: 'Maya Estrada',
+    id: 'llaurahohl',
+    name: 'Laura Hohl',
     role: 'Bridesmaid',
-    bio: 'Sunset photo director, mezcal margarita pro, and Lena’s college roommate.',
+    bio: 'Known for drinking a little too much, lending out half her wardrobe, and believing every song deserves to be played at full volume',
     image:
-      'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=900&q=80',
+      'laura.png',
     socials: {
-      instagram: 'https://instagram.com/mayalens',
+      instagram: 'https://instagram.com/llaurahohl',
     },
-    vibe: 'Analog camera + modern glam.',
+    vibe: 'tbd',
   },
   {
     id: 'taylor-cho',

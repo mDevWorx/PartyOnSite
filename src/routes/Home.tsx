@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { bridesmaids, itinerary, partyInfo } from '../data/party'
+import { bridesmaids, itinerary } from '../data/party'
+import usePartyInfo from '../hooks/usePartyInfo'
 import '../App.css'
 
 const Home = () => {
+  const { partyInfo, loading: isPartyInfoLoading, error: partyInfoError } = usePartyInfo()
   const [isQrOpen, setIsQrOpen] = useState(false)
 
   useEffect(() => {
@@ -31,6 +33,14 @@ const Home = () => {
           <span className="script-accent">Let&apos;s celebrate</span>
         </h1>
         <p className="hero-blurb">{partyInfo.blurb}</p>
+        {isPartyInfoLoading ? (
+          <div className="data-status">Loading the latest details…</div>
+        ) : null}
+        {partyInfoError ? (
+          <div className="data-status error">
+            Unable to load live updates right now. Showing saved details instead.
+          </div>
+        ) : null}
 
         <div className="hero-cta">
           <div className="cta-buttons">

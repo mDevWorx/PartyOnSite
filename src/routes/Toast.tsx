@@ -1,8 +1,10 @@
 import { Link } from 'react-router-dom'
-import { partyInfo } from '../data/party'
+import usePartyInfo from '../hooks/usePartyInfo'
 import '../App.css'
 
 const Toast = () => {
+  const { partyInfo, loading: isPartyInfoLoading, error: partyInfoError } = usePartyInfo()
+
   return (
     <div className="page" id="top">
       <nav className="crumbs">
@@ -18,6 +20,14 @@ const Toast = () => {
           Choose whichever app you prefer. Drop a note with your name or a quick toast so we can
           share it with {partyInfo.bride} during golden hour.
         </p>
+        {isPartyInfoLoading ? (
+          <div className="data-status">Loading the latest payment info…</div>
+        ) : null}
+        {partyInfoError ? (
+          <div className="data-status error">
+            Unable to fetch the live list. Showing our saved handles for now.
+          </div>
+        ) : null}
 
         <div className="contribution-grid">
           {partyInfo.contributionLinks.map((link) => (
