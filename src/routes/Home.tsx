@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { bridesmaids, itinerary } from '../data/party'
+import { brideProfile, bridesmaids, itinerary } from '../data/party'
 import usePartyInfo from '../hooks/usePartyInfo'
 import '../App.css'
 
@@ -102,6 +102,31 @@ const Home = () => {
               <p>{stop.detail}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="panel soft bride-panel" id="bride">
+        <div className="section-header">
+          <div>
+            <p className="eyebrow">The bride</p>
+            <h2>Meet {brideProfile.name}</h2>
+          </div>
+        </div>
+        <div className="bride-card">
+          <div className="bride-image">
+            <img src={brideProfile.image} alt={brideProfile.name} loading="lazy" />
+          </div>
+          <div className="bride-copy">
+            <div className="pill">{brideProfile.role}</div>
+            <h3>{brideProfile.name}</h3>
+            <p>{brideProfile.bio}</p>
+            {brideProfile.vibe ? <p className="muted">{brideProfile.vibe}</p> : null}
+            <div className="cta-buttons">
+              <Link className="primary-button" to={`/bridesmaid/${brideProfile.id}`}>
+                Learn more
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 

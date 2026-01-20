@@ -265,6 +265,25 @@
   gap: 1.25rem;
   margin-top: 1rem;
 }
+.bride-card {
+  display: grid;
+  grid-template-columns: minmax(240px, 320px) 1fr;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.bride-image img {
+  width: 100%;
+  border-radius: 20px;
+  object-fit: cover;
+  box-shadow: 0 18px 38px -30px rgba(0, 0, 0, 0.45);
+}
+
+.bride-copy h3 {
+  margin: 0.3rem 0;
+  font-size: clamp(1.8rem, 1.5vw + 1rem, 2.2rem);
+  font-family: 'Playfair Display', 'Times New Roman', serif;
+}
 
 .crew-card {
   background: #fff;
@@ -502,6 +521,10 @@
 
   .detail-image img {
     min-height: 240px;
+  }
+
+  .bride-card {
+    grid-template-columns: 1fr;
   }
 }
 

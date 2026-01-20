@@ -22,6 +22,19 @@ export type Bridesmaid = {
   vibe?: string
 }
 
+export const brideProfile: Bridesmaid = {
+  id: 'shibby',
+  name: 'Siobhan Quirke',
+  role: 'Bride',
+  bio: 'Obviously taken',
+  image: 'shibby.png',
+  socials: {
+    instagram: 'https://instagram.com/shibbyy_q',
+    threads: 'https://www.threads.net/@sophia.lee',
+  },
+  vibe: 'Fueled by champagne, ADHD, and sunset views',
+}
+
 export const partyInfo = {
   bride: 'Lena Monroe',
   weekendName: 'Palm Springs Send-Off',

@@ -1,5 +1,5 @@
 import { Link, useParams } from 'react-router-dom'
-import { bridesmaids } from '../data/party'
+import { brideProfile, bridesmaids } from '../data/party'
 import '../App.css'
 
 const socialLabels: Record<string, string> = {
@@ -11,7 +11,8 @@ const socialLabels: Record<string, string> = {
 
 const Bridesmaid = () => {
   const { id } = useParams<{ id: string }>()
-  const person = bridesmaids.find((entry) => entry.id === id)
+  const profiles = [brideProfile, ...bridesmaids]
+  const person = profiles.find((entry) => entry.id === id)
 
   if (!person) {
     return (
