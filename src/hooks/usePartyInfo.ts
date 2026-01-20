@@ -6,16 +6,23 @@ type PartyInfo = typeof fallbackPartyInfo
 const EVENTS_API_BASE = (import.meta.env.VITE_EVENTS_API_BASE ?? '/api/events').replace(/\/$/, '')
 const configuredSlug = import.meta.env.VITE_EVENT_SLUG ?? '2025-palm-springs'
 
-const RESERVED_SEGMENTS = new Set(['toast', 'bridesmaid', 'event'])
+const RESERVED_SEGMENTS = new Set(['toast', 'bridesmaid', 'event', 'events'])
 
 const deriveSlugFromPath = () => {
   if (typeof window === 'undefined') {
     return null
   }
 
-  const segments = window.location.pathname.split('/').filter(Boolean)
-  const slugCandidate = segments.find((segment) => !RESERVED_SEGMENTS.has(segment.toLowerCase()))
-  return slugCandidate ?? null
+  const url = new URL(window.location.href)
+  const pathSegments = url.pathname.split('/').filter(Boolean)
+  const slugCandidate = pathSegments.find((segment) => !RESERVED_SEGMENTS.has(segment.toLowerCase()))
+
+  if (slugCandidate) {
+    return slugCandidate
+  }
+
+  const apiSlug = url.pathname.split('/').filter(Boolean).pop()
+  return apiSlug ?? null
 }
 
 const DEFAULT_EVENT_SLUG = deriveSlugFromPath() ?? configuredSlug

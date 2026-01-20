@@ -152,7 +152,7 @@ const Home = () => {
       <section className="panel soft cta-panel">
         <div className="cta-copy">
           <p className="eyebrow">Spoil the bride</p>
-          <h2>Send Lena a toast</h2>
+          <h2>Send Shibby a toast</h2>
           <p>
             If you can&apos;t make it in person or want to send a pre-weekend treat, use the link
             below. We&apos;ll surprise her during golden hour and share the cheers.

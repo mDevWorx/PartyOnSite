@@ -36,7 +36,7 @@ export const brideProfile: Bridesmaid = {
 }
 
 export const partyInfo = {
-  bride: 'Lena Monroe',
+  bride: 'Shibby Monroe',
   weekendName: 'Palm Springs Send-Off',
   dates: 'May 22 - 25, 2025',
   location: 'Palm Springs, California',
@@ -45,7 +45,7 @@ export const partyInfo = {
   drinkLink: 'https://example.com/buy-the-bride-a-drink',
   qrLabel: 'Scan to buy the bride a drink',
   blurb:
-    'Three days of sunshine, sequins, and zero group chat stress. Save the dates and get ready to celebrate Lena with spritzes, dancing, and desert sunsets.',
+    'Three days of sunshine, sequins, and zero group chat stress. Save the dates and get ready to celebrate Shibby with spritzes, dancing, and desert sunsets.',
   highlights: [
     'Poolside welcome spritz + charcuterie on Thursday',
     'Friday night neon dinner and drag show downtown',
@@ -61,13 +61,13 @@ export const partyInfo = {
     },
     {
       platform: 'Cash App',
-      handle: '$LenaMonroe',
-      url: 'https://cash.app/$LenaMonroe',
+      handle: '$ShibbyMonroe',
+      url: 'https://cash.app/$ShibbyMonroe',
     },
     {
       platform: 'PayPal',
-      handle: 'paypal.me/lenamonroe',
-      url: 'https://paypal.me/lenamonroe',
+      handle: 'paypal.me/Shibbymonroe',
+      url: 'https://paypal.me/Shibbymonroe',
       note: 'Use “Friends & Family” if prompted.',
     },
   ],
@@ -101,7 +101,7 @@ export const bridesmaids: Bridesmaid[] = [
     id: 'sophia-lee',
     name: 'Sophia Lee',
     role: 'Maid of Honor',
-    bio: 'Planner-in-chief, playlist curator, and keeper of Lena stories since freshman year.',
+    bio: 'Planner-in-chief, playlist curator, and keeper of Shibby stories since freshman year.',
     image:
       'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=900&q=80',
     socials: {
@@ -139,7 +139,7 @@ export const bridesmaids: Bridesmaid[] = [
     id: 'nina-kelley',
     name: 'Nina Kelley',
     role: 'Bridesmaid',
-    bio: 'Hotel lobby storyteller, skincare aficionado, and Lena’s cousin turned sister.',
+    bio: 'Hotel lobby storyteller, skincare aficionado, and Shibby’s cousin turned sister.',
     image:
       'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&w=900&q=80',
     socials: {
@@ -152,7 +152,7 @@ export const bridesmaids: Bridesmaid[] = [
     id: 'ari-jackson',
     name: 'Ari Jackson',
     role: 'Bridesmaid',
-    bio: 'Logistics hero, karaoke legend, and the first to cheer when Lena said yes.',
+    bio: 'Logistics hero, karaoke legend, and the first to cheer when Shibby said yes.',
     image:
       'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80',
     socials: {
