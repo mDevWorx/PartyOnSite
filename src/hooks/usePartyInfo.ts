@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import type { ContributionLink } from '../data/party'
 import { brideProfile, bridesmaids as fallbackBridesmaids, partyInfo as fallbackPartyInfo } from '../data/party'
 
 type PartyInfo = typeof fallbackPartyInfo
@@ -52,13 +53,47 @@ const DEFAULT_BASE_PATH =
 
 type ApiBridesmaid = Partial<Bridesmaid> & { SK?: string; PK?: string }
 
+type DrinkLinkMap = Record<string, { link?: string; blurb?: string; handle?: string }>
+
 type PartyApiResponse = {
-  meta?: Partial<PartyInfo> & { heroHighlights?: string[] }
+  meta?: Partial<PartyInfo> & { heroHighlights?: string[]; drinkLinks?: DrinkLinkMap }
   bridesmaids?: ApiBridesmaid[]
   bride?: Partial<typeof brideProfile>
 }
 
 const fallbackImage = fallbackBridesmaids[0]?.image ?? '/qr-placeholder.svg'
+const normalizeContributionLinks = (input?: DrinkLinkMap): ContributionLink[] => {
+  if (!input) {
+    return fallbackPartyInfo.contributionLinks
+  }
+
+  const formatPlatform = (platform: string) =>
+    platform
+      .replace(/[-_]/g, ' ')
+      .replace(/\b\w/g, (char) => char.toUpperCase())
+
+  const links = Object.entries(input)
+    .map(([platform, details]) => {
+      if (!details?.link) {
+        return null
+      }
+
+      const derivedHandle =
+        details.handle ??
+        details.link.split('/').filter(Boolean).pop() ??
+        undefined
+
+      return {
+        platform: formatPlatform(platform),
+        url: details.link,
+        handle: derivedHandle,
+        note: details.blurb,
+      } satisfies ContributionLink
+    })
+    .filter((entry): entry is ContributionLink => Boolean(entry))
+
+  return links.length ? links : fallbackPartyInfo.contributionLinks
+}
 const computeEventStatus = (dates: string) => {
   if (!dates) {
     return EVENT_STATUS.UPCOMING
@@ -113,10 +148,12 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
             payload.meta.heroHighlights ??
             payload.meta.highlights ??
             fallbackPartyInfo.highlights
+          const contributionLinks = normalizeContributionLinks(payload.meta.drinkLinks)
           const mergedMeta: PartyInfo = {
             ...fallbackPartyInfo,
             ...payload.meta,
             highlights,
+            contributionLinks,
           }
           setPartyInfo(mergedMeta)
           setStatusLabel(computeEventStatus(mergedMeta.dates))
