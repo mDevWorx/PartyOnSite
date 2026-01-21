@@ -159,11 +159,13 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
   const [basePath] = useState(DEFAULT_BASE_PATH)
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [error, setError] = useState<string | null>(null)
+  const [hydrated, setHydrated] = useState(false)
 
   const endpoint = useMemo(() => `${EVENTS_API_BASE}/${eventSlug}`, [eventSlug])
 
   useEffect(() => {
     const controller = new AbortController()
+    setHydrated(false)
 
     const fetchMeta = async () => {
       setStatus('loading')
@@ -266,6 +268,10 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
         console.error('Failed to load party info', fetchError)
         setStatus('error')
         setError(fetchError instanceof Error ? fetchError.message : 'Failed to load party info')
+      } finally {
+        if (!controller.signal.aborted) {
+          setHydrated(true)
+        }
       }
     }
 
@@ -286,6 +292,7 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
     eventSlug: eventSlug,
     loading: status === 'loading',
     error,
+    hydrated,
   }
 }
 

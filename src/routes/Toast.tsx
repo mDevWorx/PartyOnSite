@@ -4,12 +4,33 @@ import useThemeClass from '../hooks/useThemeClass'
 import '../App.css'
 
 const Toast = () => {
-  const { partyInfo, bride, eventBasePath, loading: isPartyInfoLoading, error: partyInfoError } = usePartyInfo()
+  const {
+    partyInfo,
+    bride,
+    eventBasePath,
+    loading: isPartyInfoLoading,
+    error: partyInfoError,
+    hydrated,
+  } = usePartyInfo()
+  const themeToken = hydrated ? partyInfo.theme : undefined
+  const { isBoysTheme } = useThemeClass(themeToken)
+
+  if (!hydrated) {
+    return (
+      <div className="page loading-state" id="top">
+        <div className="panel soft loading-panel">
+          <p className="eyebrow">Setting up</p>
+          <h2>Loading payment options…</h2>
+          <p className="muted">Hang tight while we fetch the latest toast info.</p>
+        </div>
+      </div>
+    )
+  }
+
   const homeHref = eventBasePath || '/'
   const honoreeName = bride?.name ?? partyInfo.bride
   const honoreeRole = bride?.role ?? 'Guest of Honor'
   const honoreeLabel = honoreeRole === 'Groom' ? 'groom' : honoreeRole === 'Bride' ? 'bride' : 'guest of honor'
-  const { isBoysTheme } = useThemeClass(partyInfo.theme)
 
   return (
     <div className={`page ${isBoysTheme ? 'boys-theme' : 'ladies-theme'}`} id="top">

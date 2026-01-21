@@ -31,6 +31,7 @@ const Home = () => {
     eventSlug,
     loading: isPartyInfoLoading,
     error: partyInfoError,
+    hydrated,
   } = usePartyInfo()
   const { downloadCard, isGenerating: isShareGenerating } = useShareImage()
 
@@ -39,23 +40,11 @@ const Home = () => {
     const normalizedSuffix = suffix.startsWith('/') ? suffix : `/${suffix}`
     return `${basePath}${normalizedSuffix}` || normalizedSuffix
   }
-  const { isBoysTheme } = useThemeClass(partyInfo.theme)
-  const themeTagline = partyInfo.themeTagline ?? (isBoysTheme ? 'The fellas are up next' : partyInfo.theme)
-  const crewSegment = bride.role === 'Groom' ? 'groomsman' : 'bridesmaid'
-  const crewLabelPlural = bride.role === 'Groom' ? 'Groomsmen' : 'Bridesmaids'
-  const coEventEyebrow =
-    partyInfo.coEventEyebrow ?? (isBoysTheme ? 'What about the girls?' : 'What about the boys?')
-  const coEventTitle =
-    partyInfo.coEventTitle ?? (isBoysTheme ? 'See the bridal plans' : 'Peep the bachelor plans')
-  const coEventDescription =
-    partyInfo.coEventDescription ??
-    'Their crew has a full itinerary brewing—peek at their schedule, highlights, and ways to send a round.'
-  const coEventButtonLabel =
-    partyInfo.coEventButtonLabel ?? (isBoysTheme ? "Visit the ladies' page" : "Visit the boys' page")
+  const themeToken = hydrated ? partyInfo.theme : undefined
+  const { isBoysTheme } = useThemeClass(themeToken)
   const heroShareRef = useRef<HTMLDivElement>(null)
   const shareFileName = eventSlug ? `${eventSlug}-weekend` : 'weekend-card'
   const [isQrOpen, setIsQrOpen] = useState(false)
-
   useEffect(() => {
     if (!isQrOpen) return
 
@@ -71,6 +60,31 @@ const Home = () => {
 
   const openQrModal = () => setIsQrOpen(true)
   const closeQrModal = () => setIsQrOpen(false)
+
+  if (!hydrated) {
+    return (
+      <div className="page loading-state" id="top">
+        <div className="panel soft loading-panel">
+          <p className="eyebrow">Loading event</p>
+          <h2>Grabbing the latest details…</h2>
+          <p className="muted">Hang tight while we fetch this weekend&apos;s info.</p>
+        </div>
+      </div>
+    )
+  }
+
+  const themeTagline = partyInfo.themeTagline ?? (isBoysTheme ? 'The fellas are up next' : partyInfo.theme)
+  const crewSegment = bride.role === 'Groom' ? 'groomsman' : 'bridesmaid'
+  const crewLabelPlural = bride.role === 'Groom' ? 'Groomsmen' : 'Bridesmaids'
+  const coEventEyebrow =
+    partyInfo.coEventEyebrow ?? (isBoysTheme ? 'What about the girls?' : 'What about the boys?')
+  const coEventTitle =
+    partyInfo.coEventTitle ?? (isBoysTheme ? 'See the bridal plans' : 'Peep the bachelor plans')
+  const coEventDescription =
+    partyInfo.coEventDescription ??
+    'Their crew has a full itinerary brewing—peek at their schedule, highlights, and ways to send a round.'
+  const coEventButtonLabel =
+    partyInfo.coEventButtonLabel ?? (isBoysTheme ? "Visit the ladies' page" : "Visit the boys' page")
 
   return (
     <div className={`page ${isBoysTheme ? 'boys-theme' : 'ladies-theme'}`} id="top">

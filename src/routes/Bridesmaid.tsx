@@ -13,8 +13,22 @@ const socialLabels: Record<string, string> = {
 
 const Bridesmaid = () => {
   const { id } = useParams<{ id: string }>()
-  const { bride, bridesmaids, eventBasePath, partyInfo } = usePartyInfo()
-  const { isBoysTheme } = useThemeClass(partyInfo.theme)
+  const { bride, bridesmaids, eventBasePath, partyInfo, hydrated } = usePartyInfo()
+  const themeToken = hydrated ? partyInfo.theme : undefined
+  const { isBoysTheme } = useThemeClass(themeToken)
+
+  if (!hydrated) {
+    return (
+      <div className="page loading-state">
+        <div className="panel soft loading-panel">
+          <p className="eyebrow">Loading profile</p>
+          <h2>Hold on a sec…</h2>
+          <p className="muted">We&apos;re fetching their bio and socials.</p>
+        </div>
+      </div>
+    )
+  }
+
   const profiles = [bride ?? brideProfile, ...bridesmaids]
   const homeHref = eventBasePath || '/'
   const crewLabelPlural = bride.role === 'Groom' ? 'Groomsmen' : 'Bridesmaids'
