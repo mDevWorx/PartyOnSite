@@ -38,8 +38,10 @@ const Home = () => {
 
   const basePath = eventBasePath || ''
   const buildPath = (suffix: string) => {
-    const normalizedSuffix = suffix.startsWith('/') ? suffix : `/${suffix}`
-    return `${basePath}${normalizedSuffix}` || normalizedSuffix
+    const trimmedSuffix = suffix.replace(/^\/+/, '')
+    const normalizedSuffix = trimmedSuffix ? `/${trimmedSuffix}` : ''
+    const combinedPath = `${basePath}${normalizedSuffix}`
+    return combinedPath || normalizedSuffix || '/'
   }
   const { isBoysTheme } = useThemeClass(displayTheme)
   const heroShareRef = useRef<HTMLDivElement>(null)
