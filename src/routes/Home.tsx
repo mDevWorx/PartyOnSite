@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { itinerary } from '../data/party'
 import usePartyInfo from '../hooks/usePartyInfo'
+import useShareImage from '../hooks/useShareImage'
 import '../App.css'
 
 const Home = () => {
@@ -11,15 +12,19 @@ const Home = () => {
     bridesmaids: bridesmaidsList,
     eventStatus,
     eventBasePath,
+    eventSlug,
     loading: isPartyInfoLoading,
     error: partyInfoError,
   } = usePartyInfo()
+  const { downloadCard, isGenerating: isShareGenerating } = useShareImage()
 
   const basePath = eventBasePath || ''
   const buildPath = (suffix: string) => {
     const normalizedSuffix = suffix.startsWith('/') ? suffix : `/${suffix}`
     return `${basePath}${normalizedSuffix}` || normalizedSuffix
   }
+  const heroShareRef = useRef<HTMLDivElement>(null)
+  const shareFileName = eventSlug ? `${eventSlug}-weekend` : 'weekend-card'
   const [isQrOpen, setIsQrOpen] = useState(false)
 
   useEffect(() => {
@@ -40,6 +45,28 @@ const Home = () => {
 
   return (
     <div className="page" id="top">
+      <div className="share-previews" aria-hidden="true">
+        <div className="weekend-share-card" ref={heroShareRef}>
+          <div className="status-pill">{eventStatus}</div>
+          <h1>
+            {partyInfo.bride}&apos;s {partyInfo.weekendName}
+          </h1>
+          <p className="share-location">{partyInfo.location}</p>
+          <p className="share-dates">{partyInfo.dates}</p>
+          <div className="share-itinerary">
+            {itinerary.map((stop) => (
+              <div key={stop.day} className="share-stop">
+                <div className="share-stop-day">{stop.day}</div>
+                <div>
+                  <h3>{stop.title}</h3>
+                  <p>{stop.detail}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <header className="hero">
         <div className="eyebrow hero-status">
           <span className={`status-pill ${eventStatus}`}>{eventStatus}</span>
@@ -88,6 +115,14 @@ const Home = () => {
             <strong>{partyInfo.lodging}</strong>
           </div>
         </div>
+        <button
+          className="share-button"
+          type="button"
+          onClick={() => downloadCard(heroShareRef.current, shareFileName)}
+          disabled={isShareGenerating || !heroShareRef.current}
+        >
+          {isShareGenerating || !heroShareRef.current ? 'Preparing card…' : 'Download weekend card'}
+        </button>
       </header>
 
       <section className="panel">

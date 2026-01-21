@@ -296,6 +296,80 @@
   transition: transform 180ms ease, box-shadow 220ms ease;
 }
 
+.share-button {
+  margin-top: 0.75rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  border: 1px dashed rgba(0, 0, 0, 0.25);
+  background: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.share-button:hover:not(:disabled) {
+  border-color: #f65a83;
+  color: #f65a83;
+}
+
+.share-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.share-previews {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.weekend-share-card {
+  width: 1080px;
+  padding: 90px 80px;
+  border-radius: 48px;
+  background: radial-gradient(circle at 20% 20%, rgba(246, 90, 131, 0.1), transparent 45%), #ffffff;
+  color: #1f1a1c;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0 45px 140px -40px rgba(0, 0, 0, 0.55);
+}
+
+.weekend-share-card h1 {
+  font-family: 'Playfair Display', 'Times New Roman', serif;
+  font-size: 3.2rem;
+  margin: 0;
+}
+
+.share-location,
+.share-dates {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.share-itinerary {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.share-stop {
+  display: flex;
+  gap: 1rem;
+}
+
+.share-stop-day {
+  font-weight: 700;
+  min-width: 120px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
 .crew-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 22px 38px -26px rgba(0, 0, 0, 0.48);
