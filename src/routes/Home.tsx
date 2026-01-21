@@ -43,6 +43,15 @@ const Home = () => {
   const themeTagline = partyInfo.themeTagline ?? (isBoysTheme ? 'The fellas are up next' : partyInfo.theme)
   const crewSegment = bride.role === 'Groom' ? 'groomsman' : 'bridesmaid'
   const crewLabelPlural = bride.role === 'Groom' ? 'Groomsmen' : 'Bridesmaids'
+  const coEventEyebrow =
+    partyInfo.coEventEyebrow ?? (isBoysTheme ? 'What about the girls?' : 'What about the boys?')
+  const coEventTitle =
+    partyInfo.coEventTitle ?? (isBoysTheme ? 'See the bridal plans' : 'Peep the bachelor plans')
+  const coEventDescription =
+    partyInfo.coEventDescription ??
+    'Their crew has a full itinerary brewing—peek at their schedule, highlights, and ways to send a round.'
+  const coEventButtonLabel =
+    partyInfo.coEventButtonLabel ?? (isBoysTheme ? "Visit the ladies' page" : "Visit the boys' page")
   const heroShareRef = useRef<HTMLDivElement>(null)
   const shareFileName = eventSlug ? `${eventSlug}-weekend` : 'weekend-card'
   const [isQrOpen, setIsQrOpen] = useState(false)
@@ -149,7 +158,7 @@ const Home = () => {
         <div className="section-header">
           <div>
             <p className="eyebrow">What to expect</p>
-            <h2>Event Highlights</h2>
+            <h2>Weekend highlights</h2>
           </div>
           <div className="tagline">{themeTagline}</div>
         </div>
@@ -243,18 +252,15 @@ const Home = () => {
 
       {partyInfo.coEvent ? (
         <section className="panel soft">
-          <p className="eyebrow">What about the boys?</p>
-          <h2>Peep the bachelor plans</h2>
-          <p>
-            The guys have their own itinerary brewing. Check out their page for dates, details, and
-            how to send them a round.
-          </p>
+          <p className="eyebrow">{coEventEyebrow}</p>
+          <h2>{coEventTitle}</h2>
+          <p>{coEventDescription}</p>
           <div className="cta-buttons">
             <a
               className="ghost-button boys-button"
               href={`${getCoEventBasePath(basePath, isBoysTheme)}/${partyInfo.coEvent}`}
             >
-              Visit the boys&apos; page
+              {coEventButtonLabel}
             </a>
           </div>
         </section>
