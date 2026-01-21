@@ -3,12 +3,13 @@ import usePartyInfo from '../hooks/usePartyInfo'
 import '../App.css'
 
 const Toast = () => {
-  const { partyInfo, loading: isPartyInfoLoading, error: partyInfoError } = usePartyInfo()
+  const { partyInfo, eventBasePath, loading: isPartyInfoLoading, error: partyInfoError } = usePartyInfo()
+  const homeHref = eventBasePath || '/'
 
   return (
     <div className="page" id="top">
       <nav className="crumbs">
-        <Link to="/">Home</Link>
+        <Link to={homeHref}>Home</Link>
         <span>/</span>
         <span className="muted">Send a toast</span>
       </nav>
@@ -49,7 +50,7 @@ const Toast = () => {
         </div>
 
         <div className="cta-buttons toast-cta">
-          <Link className="ghost-button" to="/">
+          <Link className="ghost-button" to={homeHref}>
             Back to home
           </Link>
           <a className="ghost-button" href="#top">

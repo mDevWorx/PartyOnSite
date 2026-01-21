@@ -9,9 +9,17 @@ const Home = () => {
     partyInfo,
     bride,
     bridesmaids: bridesmaidsList,
+    eventStatus,
+    eventBasePath,
     loading: isPartyInfoLoading,
     error: partyInfoError,
   } = usePartyInfo()
+
+  const basePath = eventBasePath || ''
+  const buildPath = (suffix: string) => {
+    const normalizedSuffix = suffix.startsWith('/') ? suffix : `/${suffix}`
+    return `${basePath}${normalizedSuffix}` || normalizedSuffix
+  }
   const [isQrOpen, setIsQrOpen] = useState(false)
 
   useEffect(() => {
@@ -33,7 +41,10 @@ const Home = () => {
   return (
     <div className="page" id="top">
       <header className="hero">
-        <div className="eyebrow">Bachelorette Weekend • {partyInfo.location}</div>
+        <div className="eyebrow hero-status">
+          <span className={`status-pill ${eventStatus}`}>{eventStatus}</span>
+          <span>Bachelorette Weekend • {partyInfo.location}</span>
+        </div>
         <h1>
           {partyInfo.bride}&apos;s {partyInfo.weekendName}
           <span className="script-accent">Let&apos;s celebrate</span>
@@ -50,7 +61,7 @@ const Home = () => {
 
         <div className="hero-cta">
           <div className="cta-buttons">
-            <Link className="primary-button" to="/toast">
+            <Link className="primary-button" to={buildPath('/toast')}>
               Buy the bride a drink
             </Link>
             <a className="ghost-button" href="#crew">
@@ -128,7 +139,7 @@ const Home = () => {
             <p>{bride.bio}</p>
             {bride.vibe ? <p className="muted">{bride.vibe}</p> : null}
             <div className="cta-buttons">
-              <Link className="primary-button" to={`/bridesmaid/${bride.id}`}>
+              <Link className="primary-button" to={buildPath(`/bridesmaid/${bride.id}`)}>
                 Learn more
               </Link>
             </div>
@@ -141,7 +152,7 @@ const Home = () => {
         <h2>Meet the crew</h2>
         <div className="crew-grid">
           {bridesmaidsList.map((person) => (
-            <Link key={person.id} to={`/bridesmaid/${person.id}`} className="crew-card">
+            <Link key={person.id} to={buildPath(`/bridesmaid/${person.id}`)} className="crew-card">
               <div className="crew-image">
                 <img src={person.image} alt={person.name} loading="lazy" />
               </div>
@@ -164,7 +175,7 @@ const Home = () => {
             below. We&apos;ll surprise her during golden hour and share the cheers.
           </p>
           <div className="cta-buttons">
-            <Link className="primary-button" to="/toast">
+            <Link className="primary-button" to={buildPath('/toast')}>
               Buy the bride a drink
             </Link>
             <a className="ghost-button" href="#top">

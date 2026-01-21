@@ -4,29 +4,51 @@ import { brideProfile, bridesmaids as fallbackBridesmaids, partyInfo as fallback
 type PartyInfo = typeof fallbackPartyInfo
 type Bridesmaid = (typeof fallbackBridesmaids)[number]
 
+const EVENT_STATUS = {
+  UPCOMING: 'upcoming',
+  LIVE: 'live',
+  PAST: 'past',
+} as const
+
 const EVENTS_API_BASE = (import.meta.env.VITE_EVENTS_API_BASE ?? '/api/events').replace(/\/$/, '')
 const configuredSlug = import.meta.env.VITE_EVENT_SLUG ?? '2025-palm-springs'
 
-const RESERVED_SEGMENTS = new Set(['toast', 'bridesmaid', 'event', 'events'])
+const RESERVED_SEGMENTS = new Set(['toast', 'bridesmaid'])
 
-const deriveSlugFromPath = () => {
+const deriveSlugDetails = () => {
   if (typeof window === 'undefined') {
-    return null
+    return { slug: null, basePath: '' }
   }
 
-  const url = new URL(window.location.href)
-  const pathSegments = url.pathname.split('/').filter(Boolean)
-  const slugCandidate = pathSegments.find((segment) => !RESERVED_SEGMENTS.has(segment.toLowerCase()))
-
-  if (slugCandidate) {
-    return slugCandidate
+  const pathSegments = window.location.pathname.split('/').filter(Boolean)
+  if (!pathSegments.length) {
+    return { slug: null, basePath: '' }
   }
 
-  const apiSlug = url.pathname.split('/').filter(Boolean).pop()
-  return apiSlug ?? null
+  const [first, second] = pathSegments
+  const firstLower = first.toLowerCase()
+
+  if ((firstLower === 'event' || firstLower === 'events') && second) {
+    return {
+      slug: second,
+      basePath: `/${first}/${second}`,
+    }
+  }
+
+  if (!RESERVED_SEGMENTS.has(firstLower)) {
+    return {
+      slug: first,
+      basePath: `/${first}`,
+    }
+  }
+
+  return { slug: null, basePath: '' }
 }
 
-const DEFAULT_EVENT_SLUG = deriveSlugFromPath() ?? configuredSlug
+const { slug: slugFromPath, basePath: basePathFromPath } = deriveSlugDetails()
+const DEFAULT_EVENT_SLUG = slugFromPath ?? configuredSlug
+const DEFAULT_BASE_PATH =
+  basePathFromPath || (slugFromPath ? `/${slugFromPath}` : '')
 
 type ApiBridesmaid = Partial<Bridesmaid> & { SK?: string; PK?: string }
 
@@ -37,11 +59,38 @@ type PartyApiResponse = {
 }
 
 const fallbackImage = fallbackBridesmaids[0]?.image ?? '/qr-placeholder.svg'
+const computeEventStatus = (dates: string) => {
+  if (!dates) {
+    return EVENT_STATUS.UPCOMING
+  }
+
+  const [rangeStart, rangeEnd] = dates.split('-').map((segment) => segment.trim())
+  const currentYear = new Date().getFullYear()
+  const startDate = rangeStart ? new Date(`${rangeStart} ${currentYear}`) : null
+  const endDate = rangeEnd ? new Date(`${rangeEnd} ${currentYear}`) : null
+  const today = new Date()
+
+  if (startDate && today < startDate) {
+    return EVENT_STATUS.UPCOMING
+  }
+
+  if (endDate && today > endDate) {
+    return EVENT_STATUS.PAST
+  }
+
+  if (startDate && endDate && today >= startDate && today <= endDate) {
+    return EVENT_STATUS.LIVE
+  }
+
+  return EVENT_STATUS.UPCOMING
+}
 
 const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
   const [partyInfo, setPartyInfo] = useState<PartyInfo>(fallbackPartyInfo)
   const [bridesmaidList, setBridesmaidList] = useState<Bridesmaid[]>(fallbackBridesmaids)
   const [bride, setBride] = useState(brideProfile)
+  const [statusLabel, setStatusLabel] = useState<'upcoming' | 'live' | 'past'>('upcoming')
+  const [basePath] = useState(DEFAULT_BASE_PATH)
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [error, setError] = useState<string | null>(null)
 
@@ -64,13 +113,16 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
             payload.meta.heroHighlights ??
             payload.meta.highlights ??
             fallbackPartyInfo.highlights
-          setPartyInfo({
+          const mergedMeta: PartyInfo = {
             ...fallbackPartyInfo,
             ...payload.meta,
             highlights,
-          })
+          }
+          setPartyInfo(mergedMeta)
+          setStatusLabel(computeEventStatus(mergedMeta.dates))
         } else {
           setPartyInfo(fallbackPartyInfo)
+          setStatusLabel(computeEventStatus(fallbackPartyInfo.dates))
         }
 
         if (payload.bride) {
@@ -141,6 +193,9 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
     partyInfo,
     bride,
     bridesmaids: bridesmaidList,
+    eventStatus: statusLabel,
+    eventBasePath: basePath,
+    eventSlug: eventSlug,
     loading: status === 'loading',
     error,
   }

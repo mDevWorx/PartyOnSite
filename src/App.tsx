@@ -3,7 +3,7 @@ import Bridesmaid from './routes/Bridesmaid'
 import Home from './routes/Home'
 import Toast from './routes/Toast'
 
-const router = createBrowserRouter([
+const baseRoutes = [
   {
     path: '/',
     element: <Home />,
@@ -16,6 +16,28 @@ const router = createBrowserRouter([
     path: '/bridesmaid/:id',
     element: <Bridesmaid />,
   },
+]
+
+const slugPrefixes = ['event', 'events']
+
+const slugRoutes = slugPrefixes.flatMap((prefix) => [
+  {
+    path: `/${prefix}/:slug`,
+    element: <Home />,
+  },
+  {
+    path: `/${prefix}/:slug/toast`,
+    element: <Toast />,
+  },
+  {
+    path: `/${prefix}/:slug/bridesmaid/:id`,
+    element: <Bridesmaid />,
+  },
+])
+
+const router = createBrowserRouter([
+  ...baseRoutes,
+  ...slugRoutes,
   {
     path: '*',
     element: <Home />,

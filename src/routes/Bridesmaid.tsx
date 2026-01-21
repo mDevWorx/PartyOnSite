@@ -12,8 +12,10 @@ const socialLabels: Record<string, string> = {
 
 const Bridesmaid = () => {
   const { id } = useParams<{ id: string }>()
-  const { bride, bridesmaids } = usePartyInfo()
+  const { bride, bridesmaids, eventBasePath } = usePartyInfo()
   const profiles = [bride ?? brideProfile, ...bridesmaids]
+  const homeHref = eventBasePath || '/'
+  const crewHref = `${homeHref}#crew`
   const person = profiles.find((entry) => entry.id === id)
 
   if (!person) {
@@ -23,7 +25,7 @@ const Bridesmaid = () => {
           <p className="eyebrow">Bridesmaid</p>
           <h1>We couldn&apos;t find that page</h1>
           <p>Head back to the main crew list and try again.</p>
-          <Link className="primary-button" to="/">
+          <Link className="primary-button" to={homeHref}>
             Back to home
           </Link>
         </div>
@@ -34,9 +36,9 @@ const Bridesmaid = () => {
   return (
     <div className="page">
       <nav className="crumbs">
-        <Link to="/">Home</Link>
+        <Link to={homeHref}>Home</Link>
         <span>/</span>
-        <a href="/#crew">Bridesmaids</a>
+        <a href={crewHref}>Bridesmaids</a>
         <span>/</span>
         <span className="muted">{person.name}</span>
       </nav>
@@ -64,10 +66,10 @@ const Bridesmaid = () => {
           ) : null}
 
           <div className="cta-buttons">
-            <a className="ghost-button" href="/#crew">
+            <a className="ghost-button" href={crewHref}>
               Back to all bridesmaids
             </a>
-            <Link className="primary-button" to="/">
+            <Link className="primary-button" to={homeHref}>
               Back to home
             </Link>
           </div>
