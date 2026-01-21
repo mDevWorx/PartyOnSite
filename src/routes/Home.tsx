@@ -93,6 +93,29 @@ const Home = () => {
     window.scrollTo({ top: 0 })
   }, [location.hash, hydrated])
 
+  useEffect(() => {
+    if (!hydrated || typeof document === 'undefined') {
+      return
+    }
+
+    const honoreeName = bride?.name ?? partyInfo.bride ?? 'Our guest of honor'
+    const eventName = partyInfo.weekendName ?? 'Celebration Weekend'
+    document.title = `${honoreeName}'s ${eventName}`
+
+    const fallbackDescription = `${honoreeName}'s ${eventName} in ${partyInfo.location ?? 'your favorite city'}`
+    const description = partyInfo.blurb ?? fallbackDescription
+    let metaDescription = document.querySelector('meta[name="description"]')
+    if (!metaDescription) {
+      metaDescription = document.createElement('meta')
+      metaDescription.setAttribute('name', 'description')
+      document.head.appendChild(metaDescription)
+    }
+    metaDescription.setAttribute(
+      'content',
+      `${description} • Weekend highlights, itinerary, and how to send a toast.`,
+    )
+  }, [hydrated, partyInfo.blurb, partyInfo.location, partyInfo.weekendName, partyInfo.bride, bride?.name])
+
   const openQrModal = () => setIsQrOpen(true)
   const closeQrModal = () => setIsQrOpen(false)
 
