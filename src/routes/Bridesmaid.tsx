@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router-dom'
 import { brideProfile } from '../data/party'
 import usePartyInfo from '../hooks/usePartyInfo'
+import useThemeClass from '../hooks/useThemeClass'
 import '../App.css'
 
 const socialLabels: Record<string, string> = {
@@ -12,7 +13,8 @@ const socialLabels: Record<string, string> = {
 
 const Bridesmaid = () => {
   const { id } = useParams<{ id: string }>()
-  const { bride, bridesmaids, eventBasePath } = usePartyInfo()
+  const { bride, bridesmaids, eventBasePath, partyInfo } = usePartyInfo()
+  const { isBoysTheme } = useThemeClass(partyInfo.theme)
   const profiles = [bride ?? brideProfile, ...bridesmaids]
   const homeHref = eventBasePath || '/'
   const crewHref = `${homeHref}#crew`
@@ -20,7 +22,7 @@ const Bridesmaid = () => {
 
   if (!person) {
     return (
-      <div className="page">
+      <div className={`page ${isBoysTheme ? 'boys-theme' : 'ladies-theme'}`}>
         <div className="panel soft">
           <p className="eyebrow">Bridesmaid</p>
           <h1>We couldn&apos;t find that page</h1>
@@ -34,7 +36,7 @@ const Bridesmaid = () => {
   }
 
   return (
-    <div className="page">
+    <div className={`page ${isBoysTheme ? 'boys-theme' : 'ladies-theme'}`}>
       <nav className="crumbs">
         <Link to={homeHref}>Home</Link>
         <span>/</span>

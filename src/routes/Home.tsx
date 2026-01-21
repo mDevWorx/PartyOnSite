@@ -3,7 +3,23 @@ import { Link } from 'react-router-dom'
 import { itinerary } from '../data/party'
 import usePartyInfo from '../hooks/usePartyInfo'
 import useShareImage from '../hooks/useShareImage'
+import useThemeClass from '../hooks/useThemeClass'
 import '../App.css'
+
+const getBasePrefix = (path: string) => {
+  const segments = path.split('/').filter(Boolean)
+  return segments[0] ?? 'events'
+}
+
+const getCoEventBasePath = (currentBasePath: string, isCurrentBoys: boolean) => {
+  if (!currentBasePath) {
+    return isCurrentBoys ? '/events' : '/event'
+  }
+
+  const currentPrefix = getBasePrefix(currentBasePath)
+  const oppositePrefix = currentPrefix === 'events' ? 'event' : 'events'
+  return `/${oppositePrefix}`
+}
 
 const Home = () => {
   const {
@@ -23,7 +39,7 @@ const Home = () => {
     const normalizedSuffix = suffix.startsWith('/') ? suffix : `/${suffix}`
     return `${basePath}${normalizedSuffix}` || normalizedSuffix
   }
-  const isBoysTheme = partyInfo.theme === 'boys'
+  const { isBoysTheme } = useThemeClass(partyInfo.theme)
   const themeTagline = partyInfo.themeTagline ?? (isBoysTheme ? 'The fellas are up next' : partyInfo.theme)
   const heroShareRef = useRef<HTMLDivElement>(null)
   const shareFileName = eventSlug ? `${eventSlug}-weekend` : 'weekend-card'
@@ -41,14 +57,6 @@ const Home = () => {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isQrOpen])
-
-  useEffect(() => {
-    if (typeof document === 'undefined') return
-    document.body.classList.toggle('boys-body', isBoysTheme)
-    return () => {
-      document.body.classList.remove('boys-body')
-    }
-  }, [isBoysTheme])
 
   const openQrModal = () => setIsQrOpen(true)
   const closeQrModal = () => setIsQrOpen(false)
@@ -240,7 +248,10 @@ const Home = () => {
             how to send them a round.
           </p>
           <div className="cta-buttons">
-            <a className="ghost-button boys-button" href={`/events/${partyInfo.coEvent}`}>
+            <a
+              className="ghost-button boys-button"
+              href={`${getCoEventBasePath(basePath, isBoysTheme)}/${partyInfo.coEvent}`}
+            >
               Visit the boys&apos; page
             </a>
           </div>

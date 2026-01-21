@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import usePartyInfo from '../hooks/usePartyInfo'
+import useThemeClass from '../hooks/useThemeClass'
 import '../App.css'
 
 const Toast = () => {
@@ -8,9 +9,10 @@ const Toast = () => {
   const honoreeName = bride?.name ?? partyInfo.bride
   const honoreeRole = bride?.role ?? 'Guest of Honor'
   const honoreeLabel = honoreeRole === 'Groom' ? 'groom' : honoreeRole === 'Bride' ? 'bride' : 'guest of honor'
+  const { isBoysTheme } = useThemeClass(partyInfo.theme)
 
   return (
-    <div className="page" id="top">
+    <div className={`page ${isBoysTheme ? 'boys-theme' : 'ladies-theme'}`} id="top">
       <nav className="crumbs">
         <Link to={homeHref}>Home</Link>
         <span>/</span>
