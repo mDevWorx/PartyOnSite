@@ -45,6 +45,7 @@ const Home = () => {
   const heroShareRef = useRef<HTMLDivElement>(null)
   const shareFileName = eventSlug ? `${eventSlug}-weekend` : 'weekend-card'
   const [isQrOpen, setIsQrOpen] = useState(false)
+  const [isShareReady, setIsShareReady] = useState(false)
   useEffect(() => {
     if (!isQrOpen) return
 
@@ -57,6 +58,21 @@ const Home = () => {
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isQrOpen])
+
+  useEffect(() => {
+    if (!hydrated) {
+      setIsShareReady(false)
+      return
+    }
+
+    const handle = requestAnimationFrame(() => {
+      if (heroShareRef.current) {
+        setIsShareReady(true)
+      }
+    })
+
+    return () => cancelAnimationFrame(handle)
+  }, [hydrated])
 
   const openQrModal = () => setIsQrOpen(true)
   const closeQrModal = () => setIsQrOpen(false)
@@ -162,9 +178,9 @@ const Home = () => {
           className="share-button"
           type="button"
           onClick={() => downloadCard(heroShareRef.current, shareFileName)}
-          disabled={isShareGenerating || !heroShareRef.current}
+          disabled={isShareGenerating || !isShareReady}
         >
-          {isShareGenerating || !heroShareRef.current ? 'Preparing card…' : 'Download weekend card'}
+          {isShareGenerating || !isShareReady ? 'Preparing card…' : 'Download weekend card'}
         </button>
       </header>
 
