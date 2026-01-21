@@ -151,6 +151,7 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
           const contributionLinks = normalizeContributionLinks(payload.meta.drinkLinks)
           let themeVariant = fallbackPartyInfo.theme
           let themeTagline = payload.meta.themeTagline ?? fallbackPartyInfo.themeTagline ?? fallbackPartyInfo.theme
+          const coEventSlug = payload.meta.coEvent ?? fallbackPartyInfo.coEvent
 
           if (typeof payload.meta.theme === 'string') {
             const normalizedTheme = payload.meta.theme.toLowerCase()
@@ -166,6 +167,7 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
             ...payload.meta,
             highlights,
             contributionLinks,
+            coEvent: coEventSlug,
             theme: themeVariant,
             themeTagline,
           }

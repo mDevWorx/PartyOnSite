@@ -99,7 +99,7 @@ const Home = () => {
         <div className="hero-cta">
           <div className="cta-buttons">
             <Link className="primary-button" to={buildPath('/toast')}>
-              Buy the bride a drink
+              Buy {bride.role === 'Groom' ? 'the groom' : 'the bride'} a drink
             </Link>
             <a className="ghost-button" href="#crew">
               Meet the crew
@@ -170,7 +170,7 @@ const Home = () => {
       <section className="panel soft bride-panel" id="bride">
         <div className="section-header">
           <div>
-            <p className="eyebrow">The bride</p>
+            <p className="eyebrow">{bride.role === 'Groom' ? 'The groom' : 'The bride'}</p>
             <h2>Meet {bride.name}</h2>
           </div>
         </div>
@@ -193,7 +193,7 @@ const Home = () => {
       </section>
 
       <section className="panel" id="crew">
-        <p className="eyebrow">The bridesmaids</p>
+        <p className="eyebrow">{bride.role === 'Groom' ? 'The groomsmen' : 'The bridesmaids'}</p>
         <h2>Meet the crew</h2>
         <div className="crew-grid">
           {bridesmaidsList.map((person) => (
@@ -213,15 +213,12 @@ const Home = () => {
 
       <section className="panel soft cta-panel">
         <div className="cta-copy">
-          <p className="eyebrow">Spoil the bride</p>
-          <h2>Send Shibby a toast</h2>
-          <p>
-            If you can&apos;t make it in person or want to send a pre-weekend treat, use the link
-            below. We&apos;ll surprise her during golden hour and share the cheers.
-          </p>
+          <p className="eyebrow">{bride.role === 'Groom' ? 'Spoil the groom' : 'Spoil the guest of honor'}</p>
+          <h2>{partyInfo.ctaTitle ?? `Send ${bride.name} a toast`}</h2>
+          <p>{partyInfo.ctaBody}</p>
           <div className="cta-buttons">
             <Link className="primary-button" to={buildPath('/toast')}>
-              Buy the bride a drink
+              Buy {bride.role === 'Groom' ? 'the groom' : 'the bride'} a drink
             </Link>
             <a className="ghost-button" href="#top">
               Back to top

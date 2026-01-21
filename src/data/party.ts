@@ -47,6 +47,9 @@ export const partyInfo = {
   drinkLink: 'https://example.com/buy-the-bride-a-drink',
   qrLabel: 'Scan to buy the bride a drink',
   coEvent: null as null | string,
+  ctaTitle: 'Send the guest of honor a toast',
+  ctaBody:
+    'If you can’t make it in person or want to send a pre-weekend treat, use the link below. We’ll surprise them during golden hour and share the cheers.',
   blurb:
     'Three days of sunshine, sequins, and zero group chat stress. Save the dates and get ready to celebrate Lena with spritzes, dancing, and desert sunsets.',
   highlights: [

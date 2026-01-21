@@ -3,8 +3,11 @@ import usePartyInfo from '../hooks/usePartyInfo'
 import '../App.css'
 
 const Toast = () => {
-  const { partyInfo, eventBasePath, loading: isPartyInfoLoading, error: partyInfoError } = usePartyInfo()
+  const { partyInfo, bride, eventBasePath, loading: isPartyInfoLoading, error: partyInfoError } = usePartyInfo()
   const homeHref = eventBasePath || '/'
+  const honoreeName = bride?.name ?? partyInfo.bride
+  const honoreeRole = bride?.role ?? 'Guest of Honor'
+  const honoreeLabel = honoreeRole === 'Groom' ? 'groom' : honoreeRole === 'Bride' ? 'bride' : 'guest of honor'
 
   return (
     <div className="page" id="top">
@@ -15,12 +18,9 @@ const Toast = () => {
       </nav>
 
       <section className="panel soft toast-panel">
-        <p className="eyebrow">Spoil the bride</p>
-        <h1>Ways to send {partyInfo.bride} a drink</h1>
-        <p>
-          Choose whichever app you prefer. Drop a note with your name or a quick toast so we can
-          share it with {partyInfo.bride} during golden hour.
-        </p>
+        <p className="eyebrow">Spoil the {honoreeLabel}</p>
+        <h1>Ways to send {honoreeName} a drink</h1>
+        <p>{partyInfo.ctaBody}</p>
         {isPartyInfoLoading ? (
           <div className="data-status">Loading the latest payment info…</div>
         ) : null}
