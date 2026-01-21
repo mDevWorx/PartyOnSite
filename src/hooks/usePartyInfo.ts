@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { partyInfo as fallbackPartyInfo } from '../data/party'
+import { brideProfile, bridesmaids as fallbackBridesmaids, partyInfo as fallbackPartyInfo } from '../data/party'
 
 type PartyInfo = typeof fallbackPartyInfo
+type Bridesmaid = (typeof fallbackBridesmaids)[number]
 
 const EVENTS_API_BASE = (import.meta.env.VITE_EVENTS_API_BASE ?? '/api/events').replace(/\/$/, '')
 const configuredSlug = import.meta.env.VITE_EVENT_SLUG ?? '2025-palm-springs'
@@ -27,8 +28,19 @@ const deriveSlugFromPath = () => {
 
 const DEFAULT_EVENT_SLUG = deriveSlugFromPath() ?? configuredSlug
 
+type ApiBridesmaid = Partial<Bridesmaid> & { SK?: string; PK?: string }
+
+type PartyApiResponse = {
+  meta?: Partial<PartyInfo>
+  bridesmaids?: ApiBridesmaid[]
+  bride?: Partial<typeof brideProfile>
+}
+
+const fallbackImage = fallbackBridesmaids[0]?.image ?? '/qr-placeholder.svg'
+
 const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
   const [partyInfo, setPartyInfo] = useState<PartyInfo>(fallbackPartyInfo)
+  const [bridesmaidList, setBridesmaidList] = useState<Bridesmaid[]>(fallbackBridesmaids)
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [error, setError] = useState<string | null>(null)
 
@@ -45,8 +57,40 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
         if (!response.ok) {
           throw new Error(`Request failed (${response.status})`)
         }
-        const payload = (await response.json()) as Partial<PartyInfo>
-        setPartyInfo((prev) => ({ ...prev, ...payload }))
+        const payload = (await response.json()) as PartyApiResponse
+        if (payload.meta) {
+          setPartyInfo((prev) => ({ ...prev, ...payload.meta }))
+        }
+        if (payload.bridesmaids?.length) {
+          const normalizedBridesmaids = payload.bridesmaids
+            .map((entry) => {
+              const idFromField = entry.id
+              const idFromSK = entry.SK?.split('#')[1]
+              const idFromName = entry.name?.toLowerCase().replace(/\s+/g, '-')
+              const id = idFromField ?? idFromSK ?? idFromName
+
+              if (!id) {
+                return null
+              }
+
+              return {
+                id,
+                name: entry.name ?? 'Crew Member',
+                role: entry.role ?? 'Bridesmaid',
+                bio:
+                  entry.bio ??
+                  'Celebrating the bride with us this weekend. Check back soon for their full bio!',
+                image: entry.image ?? fallbackImage ?? '',
+                socials: entry.socials,
+                vibe: entry.vibe,
+              } satisfies Bridesmaid
+            })
+            .filter((entry): entry is Bridesmaid => Boolean(entry && entry.image))
+
+          if (normalizedBridesmaids.length) {
+            setBridesmaidList(normalizedBridesmaids)
+          }
+        }
         setStatus('success')
       } catch (fetchError) {
         if (controller.signal.aborted) {
@@ -67,6 +111,7 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
 
   return {
     partyInfo,
+    bridesmaids: bridesmaidList,
     loading: status === 'loading',
     error,
   }

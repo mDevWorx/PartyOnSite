@@ -1,11 +1,16 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { brideProfile, bridesmaids, itinerary } from '../data/party'
+import { brideProfile, itinerary } from '../data/party'
 import usePartyInfo from '../hooks/usePartyInfo'
 import '../App.css'
 
 const Home = () => {
-  const { partyInfo, loading: isPartyInfoLoading, error: partyInfoError } = usePartyInfo()
+  const {
+    partyInfo,
+    bridesmaids: bridesmaidsList,
+    loading: isPartyInfoLoading,
+    error: partyInfoError,
+  } = usePartyInfo()
   const [isQrOpen, setIsQrOpen] = useState(false)
 
   useEffect(() => {
@@ -134,7 +139,7 @@ const Home = () => {
         <p className="eyebrow">The bridesmaids</p>
         <h2>Meet the crew</h2>
         <div className="crew-grid">
-          {bridesmaids.map((person) => (
+          {bridesmaidsList.map((person) => (
             <Link key={person.id} to={`/bridesmaid/${person.id}`} className="crew-card">
               <div className="crew-image">
                 <img src={person.image} alt={person.name} loading="lazy" />
