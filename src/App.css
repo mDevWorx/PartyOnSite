@@ -331,6 +331,34 @@ body.boys-body {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--sand);
+  color: var(--ink);
+}
+
+.page.loading-state .panel {
+  background: #fffbf7;
+  border-color: rgba(0, 0, 0, 0.08);
+  color: inherit;
+}
+
+.page.loading-state .eyebrow,
+.page.loading-state .muted {
+  color: #6c5c65;
+}
+
+.page.loading-state.boys-theme {
+  background: #0b1120;
+  color: #e2e8f0;
+}
+
+.page.loading-state.boys-theme .panel {
+  background: rgba(15, 23, 42, 0.92);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.page.loading-state.boys-theme .eyebrow,
+.page.loading-state.boys-theme .muted {
+  color: #cbd5f5;
 }
 
 .loading-panel {

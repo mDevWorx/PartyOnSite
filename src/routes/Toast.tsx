@@ -11,13 +11,13 @@ const Toast = () => {
     loading: isPartyInfoLoading,
     error: partyInfoError,
     hydrated,
+    displayTheme,
   } = usePartyInfo()
-  const themeToken = hydrated ? partyInfo.theme : undefined
-  const { isBoysTheme } = useThemeClass(themeToken)
+  const { isBoysTheme } = useThemeClass(displayTheme)
 
   if (!hydrated) {
     return (
-      <div className="page loading-state" id="top">
+      <div className={`page loading-state ${isBoysTheme ? 'boys-theme' : 'ladies-theme'}`} id="top">
         <div className="panel soft loading-panel">
           <p className="eyebrow">Setting up</p>
           <h2>Loading payment options…</h2>

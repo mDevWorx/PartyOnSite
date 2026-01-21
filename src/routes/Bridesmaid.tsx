@@ -13,13 +13,12 @@ const socialLabels: Record<string, string> = {
 
 const Bridesmaid = () => {
   const { id } = useParams<{ id: string }>()
-  const { bride, bridesmaids, eventBasePath, partyInfo, hydrated } = usePartyInfo()
-  const themeToken = hydrated ? partyInfo.theme : undefined
-  const { isBoysTheme } = useThemeClass(themeToken)
+  const { bride, bridesmaids, eventBasePath, hydrated, displayTheme } = usePartyInfo()
+  const { isBoysTheme } = useThemeClass(displayTheme)
 
   if (!hydrated) {
     return (
-      <div className="page loading-state">
+      <div className={`page loading-state ${isBoysTheme ? 'boys-theme' : 'ladies-theme'}`}>
         <div className="panel soft loading-panel">
           <p className="eyebrow">Loading profile</p>
           <h2>Hold on a sec…</h2>

@@ -32,6 +32,7 @@ const Home = () => {
     loading: isPartyInfoLoading,
     error: partyInfoError,
     hydrated,
+    displayTheme,
   } = usePartyInfo()
   const { downloadCard, isGenerating: isShareGenerating } = useShareImage()
 
@@ -40,8 +41,7 @@ const Home = () => {
     const normalizedSuffix = suffix.startsWith('/') ? suffix : `/${suffix}`
     return `${basePath}${normalizedSuffix}` || normalizedSuffix
   }
-  const themeToken = hydrated ? partyInfo.theme : undefined
-  const { isBoysTheme } = useThemeClass(themeToken)
+  const { isBoysTheme } = useThemeClass(displayTheme)
   const heroShareRef = useRef<HTMLDivElement>(null)
   const shareFileName = eventSlug ? `${eventSlug}-weekend` : 'weekend-card'
   const [isQrOpen, setIsQrOpen] = useState(false)
@@ -63,7 +63,7 @@ const Home = () => {
 
   if (!hydrated) {
     return (
-      <div className="page loading-state" id="top">
+      <div className={`page loading-state ${isBoysTheme ? 'boys-theme' : 'ladies-theme'}`} id="top">
         <div className="panel soft loading-panel">
           <p className="eyebrow">Loading event</p>
           <h2>Grabbing the latest details…</h2>

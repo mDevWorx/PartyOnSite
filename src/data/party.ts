@@ -11,6 +11,27 @@ export type ContributionLink = {
   url: string
   note?: string
 }
+export type PartyTemplate = {
+  bride: string
+  weekendName: string
+  dates: string
+  location: string
+  theme: string
+  themeTagline: string
+  lodging: string
+  drinkLink: string
+  qrLabel: string
+  coEvent: string | null
+  coEventEyebrow: string
+  coEventTitle: string
+  coEventDescription: string
+  coEventButtonLabel: string
+  ctaTitle: string
+  ctaBody: string
+  blurb: string
+  highlights: string[]
+  contributionLinks: ContributionLink[]
+}
 
 export type Bridesmaid = {
   id: string
@@ -36,7 +57,7 @@ export const brideProfile: Bridesmaid = {
   vibe: 'Poolside glam with a disco soundtrack.',
 }
 
-export const partyInfo = {
+export const partyInfo: PartyTemplate = {
   bride: 'Lena Monroe',
   weekendName: 'Palm Springs Send-Off',
   dates: 'May 22 - 25, 2025',

@@ -53,11 +53,22 @@ const deriveSlugDetails = () => {
 }
 
 const { slug: slugFromPath, basePath: basePathFromPath } = deriveSlugDetails()
+const DEFAULT_THEME_FROM_PATH = (() => {
+  if (typeof window === 'undefined') {
+    return fallbackPartyInfo.theme
+  }
+  const [firstSegment] = window.location.pathname.split('/').filter(Boolean)
+  if (firstSegment?.toLowerCase() === 'events') {
+    return 'boys'
+  }
+  return fallbackPartyInfo.theme
+})()
 const DEFAULT_EVENT_SLUG = slugFromPath ?? configuredSlug
 const DEFAULT_BASE_PATH =
   basePathFromPath || (slugFromPath ? `/${slugFromPath}` : '')
 
 type ApiBridesmaid = Partial<Bridesmaid> & { SK?: string; PK?: string }
+type BrideApiPayload = Partial<typeof brideProfile> & { SK?: string; PK?: string }
 
 type DrinkLinkMap = Record<string, { link?: string; blurb?: string; handle?: string }>
 
@@ -68,7 +79,7 @@ type PartyApiResponse = {
     itinerary?: Partial<ItineraryItem>[]
   }
   bridesmaids?: ApiBridesmaid[]
-  bride?: Partial<typeof brideProfile>
+  bride?: BrideApiPayload
 }
 
 const fallbackImage = fallbackBridesmaids[0]?.image ?? '/qr-placeholder.svg'
@@ -93,12 +104,20 @@ const normalizeContributionLinks = (input?: DrinkLinkMap): ContributionLink[] =>
         details.link.split('/').filter(Boolean).pop() ??
         undefined
 
-      return {
+      const normalizedLink: ContributionLink = {
         platform: formatPlatform(platform),
         url: details.link,
-        handle: derivedHandle,
-        note: details.blurb,
-      } satisfies ContributionLink
+      }
+
+      if (derivedHandle) {
+        normalizedLink.handle = derivedHandle
+      }
+
+      if (details.blurb) {
+        normalizedLink.note = details.blurb
+      }
+
+      return normalizedLink
     })
     .filter((entry): entry is ContributionLink => Boolean(entry))
 
@@ -160,6 +179,7 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [error, setError] = useState<string | null>(null)
   const [hydrated, setHydrated] = useState(false)
+  const [displayTheme, setDisplayTheme] = useState<PartyInfo['theme']>(DEFAULT_THEME_FROM_PATH)
 
   const endpoint = useMemo(() => `${EVENTS_API_BASE}/${eventSlug}`, [eventSlug])
 
@@ -208,10 +228,12 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
           setPartyInfo(mergedMeta)
           setItineraryItems(itinerary)
           setStatusLabel(computeEventStatus(mergedMeta.dates))
+          setDisplayTheme(themeVariant)
         } else {
           setPartyInfo(fallbackPartyInfo)
           setItineraryItems(fallbackItinerary)
           setStatusLabel(computeEventStatus(fallbackPartyInfo.dates))
+          setDisplayTheme(fallbackPartyInfo.theme)
         }
 
         if (payload.bride) {
@@ -232,30 +254,35 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
         }
 
         if (payload.bridesmaids?.length) {
-          const normalizedBridesmaids = payload.bridesmaids
-            .map((entry) => {
-              const idFromField = entry.id
-              const idFromSK = entry.SK?.split('#')[1]
-              const idFromName = entry.name?.toLowerCase().replace(/\s+/g, '-')
-              const id = idFromField ?? idFromSK ?? idFromName
+          const normalizedBridesmaids = payload.bridesmaids.reduce<Bridesmaid[]>((acc, entry) => {
+            const idFromField = entry.id
+            const idFromSK = entry.SK?.split('#')[1]
+            const idFromName = entry.name?.toLowerCase().replace(/\s+/g, '-')
+            const id = idFromField ?? idFromSK ?? idFromName
 
-              if (!id) {
-                return null
-              }
+            if (!id) {
+              return acc
+            }
 
-              return {
-                id,
-                name: entry.name ?? 'Crew Member',
-                role: entry.role ?? 'Bridesmaid',
-                bio:
-                  entry.bio ??
-                  'Celebrating the bride with us this weekend. Check back soon for their full bio!',
-                image: entry.image ?? fallbackImage ?? '',
-                socials: entry.socials,
-                vibe: entry.vibe,
-              } satisfies Bridesmaid
-            })
-            .filter((entry): entry is Bridesmaid => Boolean(entry && entry.image))
+            const image = entry.image ?? fallbackImage ?? ''
+            if (!image) {
+              return acc
+            }
+
+            const normalizedEntry: Bridesmaid = {
+              id,
+              name: entry.name ?? 'Crew Member',
+              role: entry.role ?? 'Bridesmaid',
+              bio:
+                entry.bio ??
+                'Celebrating the bride with us this weekend. Check back soon for their full bio!',
+              image,
+              ...(entry.socials ? { socials: entry.socials } : {}),
+              ...(entry.vibe ? { vibe: entry.vibe } : {}),
+            }
+            acc.push(normalizedEntry)
+            return acc
+          }, [])
           setBridesmaidList(normalizedBridesmaids)
         } else {
           setBridesmaidList([])
@@ -293,6 +320,7 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
     loading: status === 'loading',
     error,
     hydrated,
+    displayTheme,
   }
 }
 
