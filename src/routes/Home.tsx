@@ -41,6 +41,8 @@ const Home = () => {
   }
   const { isBoysTheme } = useThemeClass(partyInfo.theme)
   const themeTagline = partyInfo.themeTagline ?? (isBoysTheme ? 'The fellas are up next' : partyInfo.theme)
+  const crewSegment = bride.role === 'Groom' ? 'groomsman' : 'bridesmaid'
+  const crewLabelPlural = bride.role === 'Groom' ? 'Groomsmen' : 'Bridesmaids'
   const heroShareRef = useRef<HTMLDivElement>(null)
   const shareFileName = eventSlug ? `${eventSlug}-weekend` : 'weekend-card'
   const [isQrOpen, setIsQrOpen] = useState(false)
@@ -192,7 +194,7 @@ const Home = () => {
             <p>{bride.bio}</p>
             {bride.vibe ? <p className="muted">{bride.vibe}</p> : null}
             <div className="cta-buttons">
-              <Link className="primary-button" to={buildPath(`/bridesmaid/${bride.id}`)}>
+              <Link className="primary-button" to={buildPath(`/${crewSegment}/${bride.id}`)}>
                 Learn more
               </Link>
             </div>
@@ -201,11 +203,11 @@ const Home = () => {
       </section>
 
       <section className="panel" id="crew">
-        <p className="eyebrow">{bride.role === 'Groom' ? 'The groomsmen' : 'The bridesmaids'}</p>
+        <p className="eyebrow">The {crewLabelPlural.toLowerCase()}</p>
         <h2>Meet the crew</h2>
         <div className="crew-grid">
           {bridesmaidsList.map((person) => (
-            <Link key={person.id} to={buildPath(`/bridesmaid/${person.id}`)} className="crew-card">
+            <Link key={person.id} to={buildPath(`/${crewSegment}/${person.id}`)} className="crew-card">
               <div className="crew-image">
                 <img src={person.image} alt={person.name} loading="lazy" />
               </div>

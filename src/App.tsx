@@ -16,6 +16,10 @@ const baseRoutes = [
     path: '/bridesmaid/:id',
     element: <Bridesmaid />,
   },
+  {
+    path: '/groomsman/:id',
+    element: <Bridesmaid />,
+  },
 ]
 
 const slugPrefixes = ['event', 'events']
@@ -31,6 +35,10 @@ const slugRoutes = slugPrefixes.flatMap((prefix) => [
   },
   {
     path: `/${prefix}/:slug/bridesmaid/:id`,
+    element: <Bridesmaid />,
+  },
+  {
+    path: `/${prefix}/:slug/groomsman/:id`,
     element: <Bridesmaid />,
   },
 ])

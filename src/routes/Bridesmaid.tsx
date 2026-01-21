@@ -17,6 +17,7 @@ const Bridesmaid = () => {
   const { isBoysTheme } = useThemeClass(partyInfo.theme)
   const profiles = [bride ?? brideProfile, ...bridesmaids]
   const homeHref = eventBasePath || '/'
+  const crewLabelPlural = bride.role === 'Groom' ? 'Groomsmen' : 'Bridesmaids'
   const crewHref = `${homeHref}#crew`
   const person = profiles.find((entry) => entry.id === id)
 
@@ -24,7 +25,7 @@ const Bridesmaid = () => {
     return (
       <div className={`page ${isBoysTheme ? 'boys-theme' : 'ladies-theme'}`}>
         <div className="panel soft">
-          <p className="eyebrow">Bridesmaid</p>
+          <p className="eyebrow">{crewLabelPlural}</p>
           <h1>We couldn&apos;t find that page</h1>
           <p>Head back to the main crew list and try again.</p>
           <Link className="primary-button" to={homeHref}>
@@ -40,7 +41,7 @@ const Bridesmaid = () => {
       <nav className="crumbs">
         <Link to={homeHref}>Home</Link>
         <span>/</span>
-        <a href={crewHref}>Bridesmaids</a>
+        <a href={crewHref}>{crewLabelPlural}</a>
         <span>/</span>
         <span className="muted">{person.name}</span>
       </nav>
@@ -69,7 +70,7 @@ const Bridesmaid = () => {
 
           <div className="cta-buttons">
             <a className="ghost-button" href={crewHref}>
-              Back to all bridesmaids
+              Back to all {crewLabelPlural.toLowerCase()}
             </a>
             <Link className="primary-button" to={homeHref}>
               Back to home
