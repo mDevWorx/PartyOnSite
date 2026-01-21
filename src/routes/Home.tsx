@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import usePartyInfo from '../hooks/usePartyInfo'
 import useShareImage from '../hooks/useShareImage'
 import useThemeClass from '../hooks/useThemeClass'
@@ -35,6 +35,7 @@ const Home = () => {
     displayTheme,
   } = usePartyInfo()
   const { downloadCard, isGenerating: isShareGenerating } = useShareImage()
+  const location = useLocation()
 
   const basePath = eventBasePath || ''
   const buildPath = (suffix: string) => {
@@ -75,6 +76,22 @@ const Home = () => {
 
     return () => cancelAnimationFrame(handle)
   }, [hydrated])
+
+  useEffect(() => {
+    if (!hydrated) {
+      return
+    }
+
+    if (location.hash) {
+      const target = document.querySelector(location.hash)
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        return
+      }
+    }
+
+    window.scrollTo({ top: 0 })
+  }, [location.hash, hydrated])
 
   const openQrModal = () => setIsQrOpen(true)
   const closeQrModal = () => setIsQrOpen(false)

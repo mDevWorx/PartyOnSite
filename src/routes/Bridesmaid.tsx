@@ -54,7 +54,7 @@ const Bridesmaid = () => {
       <nav className="crumbs">
         <Link to={homeHref}>Home</Link>
         <span>/</span>
-        <a href={crewHref}>{crewLabelPlural}</a>
+        <Link to={crewHref}>{crewLabelPlural}</Link>
         <span>/</span>
         <span className="muted">{person.name}</span>
       </nav>
@@ -82,9 +82,9 @@ const Bridesmaid = () => {
           ) : null}
 
           <div className="cta-buttons">
-            <a className="ghost-button" href={crewHref}>
+            <Link className="ghost-button" to={crewHref}>
               Back to all {crewLabelPlural.toLowerCase()}
-            </a>
+            </Link>
             <Link className="primary-button" to={homeHref}>
               Back to home
             </Link>
