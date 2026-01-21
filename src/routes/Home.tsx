@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { itinerary } from '../data/party'
 import usePartyInfo from '../hooks/usePartyInfo'
 import useShareImage from '../hooks/useShareImage'
 import useThemeClass from '../hooks/useThemeClass'
@@ -26,6 +25,7 @@ const Home = () => {
     partyInfo,
     bride,
     bridesmaids: bridesmaidsList,
+    itinerary: itineraryItems,
     eventStatus,
     eventBasePath,
     eventSlug,
@@ -74,7 +74,7 @@ const Home = () => {
           <p className="share-location">{partyInfo.location}</p>
           <p className="share-dates">{partyInfo.dates}</p>
           <div className="share-itinerary">
-            {itinerary.map((stop) => (
+            {itineraryItems.map((stop) => (
               <div key={stop.day} className="share-stop">
                 <div className="share-stop-day">{stop.day}</div>
                 <div>
@@ -149,7 +149,7 @@ const Home = () => {
         <div className="section-header">
           <div>
             <p className="eyebrow">What to expect</p>
-            <h2>Weekend highlights</h2>
+            <h2>Event Highlights</h2>
           </div>
           <div className="tagline">{themeTagline}</div>
         </div>
@@ -167,7 +167,7 @@ const Home = () => {
         <p className="eyebrow">Plan</p>
         <h2>Itinerary</h2>
         <div className="itinerary-grid">
-          {itinerary.map((stop) => (
+          {itineraryItems.map((stop) => (
             <div key={stop.day} className="itinerary-card">
               <div className="pill">{stop.day}</div>
               <h3>{stop.title}</h3>

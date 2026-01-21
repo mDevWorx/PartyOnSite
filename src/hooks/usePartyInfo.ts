@@ -1,9 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
 import type { ContributionLink } from '../data/party'
-import { brideProfile, bridesmaids as fallbackBridesmaids, partyInfo as fallbackPartyInfo } from '../data/party'
+import {
+  brideProfile,
+  bridesmaids as fallbackBridesmaids,
+  itinerary as fallbackItinerary,
+  partyInfo as fallbackPartyInfo,
+} from '../data/party'
 
 type PartyInfo = typeof fallbackPartyInfo
 type Bridesmaid = (typeof fallbackBridesmaids)[number]
+type ItineraryItem = (typeof fallbackItinerary)[number]
 
 const EVENT_STATUS = {
   UPCOMING: 'upcoming',
@@ -56,7 +62,11 @@ type ApiBridesmaid = Partial<Bridesmaid> & { SK?: string; PK?: string }
 type DrinkLinkMap = Record<string, { link?: string; blurb?: string; handle?: string }>
 
 type PartyApiResponse = {
-  meta?: Partial<PartyInfo> & { heroHighlights?: string[]; drinkLinks?: DrinkLinkMap }
+  meta?: Partial<PartyInfo> & {
+    heroHighlights?: string[]
+    drinkLinks?: DrinkLinkMap
+    itinerary?: Partial<ItineraryItem>[]
+  }
   bridesmaids?: ApiBridesmaid[]
   bride?: Partial<typeof brideProfile>
 }
@@ -94,6 +104,26 @@ const normalizeContributionLinks = (input?: DrinkLinkMap): ContributionLink[] =>
 
   return links.length ? links : fallbackPartyInfo.contributionLinks
 }
+const normalizeItinerary = (input?: Partial<ItineraryItem>[]): ItineraryItem[] => {
+  if (!Array.isArray(input)) {
+    return fallbackItinerary
+  }
+
+  const normalized = input
+    .map((entry) => {
+      if (!entry?.day || !entry?.title || !entry?.detail) {
+        return null
+      }
+      return {
+        day: entry.day,
+        title: entry.title,
+        detail: entry.detail,
+      } satisfies ItineraryItem
+    })
+    .filter((item): item is ItineraryItem => Boolean(item))
+
+  return normalized.length ? normalized : fallbackItinerary
+}
 const computeEventStatus = (dates: string) => {
   if (!dates) {
     return EVENT_STATUS.UPCOMING
@@ -124,6 +154,7 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
   const [partyInfo, setPartyInfo] = useState<PartyInfo>(fallbackPartyInfo)
   const [bridesmaidList, setBridesmaidList] = useState<Bridesmaid[]>(fallbackBridesmaids)
   const [bride, setBride] = useState(brideProfile)
+  const [itineraryItems, setItineraryItems] = useState<ItineraryItem[]>(fallbackItinerary)
   const [statusLabel, setStatusLabel] = useState<'upcoming' | 'live' | 'past'>('upcoming')
   const [basePath] = useState(DEFAULT_BASE_PATH)
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
@@ -149,6 +180,7 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
             payload.meta.highlights ??
             fallbackPartyInfo.highlights
           const contributionLinks = normalizeContributionLinks(payload.meta.drinkLinks)
+          const itinerary = normalizeItinerary(payload.meta.itinerary)
           let themeVariant = fallbackPartyInfo.theme
           let themeTagline = payload.meta.themeTagline ?? fallbackPartyInfo.themeTagline ?? fallbackPartyInfo.theme
           const coEventSlug = payload.meta.coEvent ?? fallbackPartyInfo.coEvent
@@ -172,9 +204,11 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
             themeTagline,
           }
           setPartyInfo(mergedMeta)
+          setItineraryItems(itinerary)
           setStatusLabel(computeEventStatus(mergedMeta.dates))
         } else {
           setPartyInfo(fallbackPartyInfo)
+          setItineraryItems(fallbackItinerary)
           setStatusLabel(computeEventStatus(fallbackPartyInfo.dates))
         }
 
@@ -246,6 +280,7 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
     partyInfo,
     bride,
     bridesmaids: bridesmaidList,
+    itinerary: itineraryItems,
     eventStatus: statusLabel,
     eventBasePath: basePath,
     eventSlug: eventSlug,
