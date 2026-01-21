@@ -12,8 +12,8 @@ const socialLabels: Record<string, string> = {
 
 const Bridesmaid = () => {
   const { id } = useParams<{ id: string }>()
-  const { bridesmaids } = usePartyInfo()
-  const profiles = [brideProfile, ...bridesmaids]
+  const { bride, bridesmaids } = usePartyInfo()
+  const profiles = [bride ?? brideProfile, ...bridesmaids]
   const person = profiles.find((entry) => entry.id === id)
 
   if (!person) {

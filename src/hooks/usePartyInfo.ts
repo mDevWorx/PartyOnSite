@@ -31,7 +31,7 @@ const DEFAULT_EVENT_SLUG = deriveSlugFromPath() ?? configuredSlug
 type ApiBridesmaid = Partial<Bridesmaid> & { SK?: string; PK?: string }
 
 type PartyApiResponse = {
-  meta?: Partial<PartyInfo>
+  meta?: Partial<PartyInfo> & { heroHighlights?: string[] }
   bridesmaids?: ApiBridesmaid[]
   bride?: Partial<typeof brideProfile>
 }
@@ -41,6 +41,7 @@ const fallbackImage = fallbackBridesmaids[0]?.image ?? '/qr-placeholder.svg'
 const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
   const [partyInfo, setPartyInfo] = useState<PartyInfo>(fallbackPartyInfo)
   const [bridesmaidList, setBridesmaidList] = useState<Bridesmaid[]>(fallbackBridesmaids)
+  const [bride, setBride] = useState(brideProfile)
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [error, setError] = useState<string | null>(null)
 
@@ -59,8 +60,36 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
         }
         const payload = (await response.json()) as PartyApiResponse
         if (payload.meta) {
-          setPartyInfo((prev) => ({ ...prev, ...payload.meta }))
+          const highlights =
+            payload.meta.heroHighlights ??
+            payload.meta.highlights ??
+            fallbackPartyInfo.highlights
+          setPartyInfo({
+            ...fallbackPartyInfo,
+            ...payload.meta,
+            highlights,
+          })
+        } else {
+          setPartyInfo(fallbackPartyInfo)
         }
+
+        if (payload.bride) {
+          const candidateId =
+            payload.bride.id ??
+            payload.bride.SK?.split('#')[1] ??
+            payload.bride.name?.toLowerCase().replace(/\s+/g, '-') ??
+            brideProfile.id
+
+          setBride({
+            ...brideProfile,
+            ...payload.bride,
+            id: candidateId,
+            image: payload.bride.image ?? brideProfile.image,
+          })
+        } else {
+          setBride(brideProfile)
+        }
+
         if (payload.bridesmaids?.length) {
           const normalizedBridesmaids = payload.bridesmaids
             .map((entry) => {
@@ -86,10 +115,9 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
               } satisfies Bridesmaid
             })
             .filter((entry): entry is Bridesmaid => Boolean(entry && entry.image))
-
-          if (normalizedBridesmaids.length) {
-            setBridesmaidList(normalizedBridesmaids)
-          }
+          setBridesmaidList(normalizedBridesmaids)
+        } else {
+          setBridesmaidList([])
         }
         setStatus('success')
       } catch (fetchError) {
@@ -111,6 +139,7 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
 
   return {
     partyInfo,
+    bride,
     bridesmaids: bridesmaidList,
     loading: status === 'loading',
     error,

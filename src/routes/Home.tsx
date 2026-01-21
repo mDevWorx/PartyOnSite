@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { brideProfile, itinerary } from '../data/party'
+import { itinerary } from '../data/party'
 import usePartyInfo from '../hooks/usePartyInfo'
 import '../App.css'
 
 const Home = () => {
   const {
     partyInfo,
+    bride,
     bridesmaids: bridesmaidsList,
     loading: isPartyInfoLoading,
     error: partyInfoError,
@@ -114,20 +115,20 @@ const Home = () => {
         <div className="section-header">
           <div>
             <p className="eyebrow">The bride</p>
-            <h2>Meet {brideProfile.name}</h2>
+            <h2>Meet {bride.name}</h2>
           </div>
         </div>
         <div className="bride-card">
           <div className="bride-image">
-            <img src={brideProfile.image} alt={brideProfile.name} loading="lazy" />
+            <img src={bride.image} alt={bride.name} loading="lazy" />
           </div>
           <div className="bride-copy">
-            <div className="pill">{brideProfile.role}</div>
-            <h3>{brideProfile.name}</h3>
-            <p>{brideProfile.bio}</p>
-            {brideProfile.vibe ? <p className="muted">{brideProfile.vibe}</p> : null}
+            <div className="pill">{bride.role}</div>
+            <h3>{bride.name}</h3>
+            <p>{bride.bio}</p>
+            {bride.vibe ? <p className="muted">{bride.vibe}</p> : null}
             <div className="cta-buttons">
-              <Link className="primary-button" to={`/bridesmaid/${brideProfile.id}`}>
+              <Link className="primary-button" to={`/bridesmaid/${bride.id}`}>
                 Learn more
               </Link>
             </div>

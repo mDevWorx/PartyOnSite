@@ -23,20 +23,21 @@ export type Bridesmaid = {
 }
 
 export const brideProfile: Bridesmaid = {
-  id: 'shibby',
-  name: 'Siobhan Quirke',
+  id: 'harper-vale',
+  name: 'Harper Vale',
   role: 'Bride',
-  bio: 'Obviously taken',
-  image: '/shibby.png',
+  bio: 'Desert dreamer, spritz enthusiast, and the reason we’re all celebrating.',
+  image:
+    'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=80',
   socials: {
-    instagram: 'https://instagram.com/shibbyy_q',
-    threads: 'https://www.threads.net/@sophia.lee',
+    instagram: 'https://instagram.com/harper.vale',
+    threads: 'https://www.threads.net/@harper.vale',
   },
-  vibe: 'Fueled by champagne, ADHD, and sunset views',
+  vibe: 'Poolside glam with a disco soundtrack.',
 }
 
 export const partyInfo = {
-  bride: 'Shibby Monroe',
+  bride: 'Lena Monroe',
   weekendName: 'Palm Springs Send-Off',
   dates: 'May 22 - 25, 2025',
   location: 'Palm Springs, California',
@@ -45,7 +46,7 @@ export const partyInfo = {
   drinkLink: 'https://example.com/buy-the-bride-a-drink',
   qrLabel: 'Scan to buy the bride a drink',
   blurb:
-    'Three days of sunshine, sequins, and zero group chat stress. Save the dates and get ready to celebrate Shibby with spritzes, dancing, and desert sunsets.',
+    'Three days of sunshine, sequins, and zero group chat stress. Save the dates and get ready to celebrate Lena with spritzes, dancing, and desert sunsets.',
   highlights: [
     'Poolside welcome spritz + charcuterie on Thursday',
     'Friday night neon dinner and drag show downtown',
@@ -61,13 +62,13 @@ export const partyInfo = {
     },
     {
       platform: 'Cash App',
-      handle: '$ShibbyMonroe',
-      url: 'https://cash.app/$ShibbyMonroe',
+      handle: '$LenaMonroe',
+      url: 'https://cash.app/$LenaMonroe',
     },
     {
       platform: 'PayPal',
-      handle: 'paypal.me/Shibbymonroe',
-      url: 'https://paypal.me/Shibbymonroe',
+      handle: 'paypal.me/Lenamonroe',
+      url: 'https://paypal.me/Lenamonroe',
       note: 'Use “Friends & Family” if prompted.',
     },
   ],
@@ -101,7 +102,7 @@ export const bridesmaids: Bridesmaid[] = [
     id: 'sophia-lee',
     name: 'Sophia Lee',
     role: 'Maid of Honor',
-    bio: 'Planner-in-chief, playlist curator, and keeper of Shibby stories since freshman year.',
+    bio: 'Planner-in-chief, playlist curator, and keeper of Lena stories since freshman year.',
     image:
       'https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=900&q=80',
     socials: {
@@ -109,17 +110,6 @@ export const bridesmaids: Bridesmaid[] = [
       threads: 'https://www.threads.net/@sophia.lee',
     },
     vibe: 'Disco ball meets color-coded itinerary.',
-  },
-  {
-    id: 'llaurahohl',
-    name: 'Laura Hohl',
-    role: 'Bridesmaid',
-    bio: 'Known for drinking a little too much, lending out half her wardrobe, and believing every song deserves to be played at full volume',
-    image: '/laura.png',
-    socials: {
-      instagram: 'https://instagram.com/llaurahohl',
-    },
-    vibe: 'tbd',
   },
   {
     id: 'taylor-cho',
@@ -138,7 +128,7 @@ export const bridesmaids: Bridesmaid[] = [
     id: 'nina-kelley',
     name: 'Nina Kelley',
     role: 'Bridesmaid',
-    bio: 'Hotel lobby storyteller, skincare aficionado, and Shibby’s cousin turned sister.',
+    bio: 'Hotel lobby storyteller, skincare aficionado, and Lena’s cousin turned sister.',
     image:
       'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?auto=format&fit=crop&w=900&q=80',
     socials: {
@@ -151,7 +141,7 @@ export const bridesmaids: Bridesmaid[] = [
     id: 'ari-jackson',
     name: 'Ari Jackson',
     role: 'Bridesmaid',
-    bio: 'Logistics hero, karaoke legend, and the first to cheer when Shibby said yes.',
+    bio: 'Logistics hero, karaoke legend, and the first to cheer when Lena said yes.',
     image:
       'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=900&q=80',
     socials: {
