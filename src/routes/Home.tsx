@@ -23,6 +23,8 @@ const Home = () => {
     const normalizedSuffix = suffix.startsWith('/') ? suffix : `/${suffix}`
     return `${basePath}${normalizedSuffix}` || normalizedSuffix
   }
+  const isBoysTheme = partyInfo.theme === 'boys'
+  const themeTagline = partyInfo.themeTagline ?? (isBoysTheme ? 'The fellas are up next' : partyInfo.theme)
   const heroShareRef = useRef<HTMLDivElement>(null)
   const shareFileName = eventSlug ? `${eventSlug}-weekend` : 'weekend-card'
   const [isQrOpen, setIsQrOpen] = useState(false)
@@ -40,11 +42,19 @@ const Home = () => {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isQrOpen])
 
+  useEffect(() => {
+    if (typeof document === 'undefined') return
+    document.body.classList.toggle('boys-body', isBoysTheme)
+    return () => {
+      document.body.classList.remove('boys-body')
+    }
+  }, [isBoysTheme])
+
   const openQrModal = () => setIsQrOpen(true)
   const closeQrModal = () => setIsQrOpen(false)
 
   return (
-    <div className="page" id="top">
+    <div className={`page ${isBoysTheme ? 'boys-theme' : 'ladies-theme'}`} id="top">
       <div className="share-previews" aria-hidden="true">
         <div className="weekend-share-card" ref={heroShareRef}>
           <div className="status-pill">{eventStatus}</div>
@@ -131,7 +141,7 @@ const Home = () => {
             <p className="eyebrow">What to expect</p>
             <h2>Weekend highlights</h2>
           </div>
-          <div className="tagline">{partyInfo.theme}</div>
+          <div className="tagline">{themeTagline}</div>
         </div>
         <div className="highlight-grid">
           {partyInfo.highlights.map((item) => (
@@ -233,7 +243,7 @@ const Home = () => {
             how to send them a round.
           </p>
           <div className="cta-buttons">
-            <a className="ghost-button" href={`/events/${partyInfo.coEvent}`}>
+            <a className="ghost-button boys-button" href={`/events/${partyInfo.coEvent}`}>
               Visit the boys&apos; page
             </a>
           </div>

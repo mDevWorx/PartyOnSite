@@ -120,6 +120,98 @@
   transform: translateY(-2px);
   box-shadow: 0 14px 34px -18px rgba(0, 0, 0, 0.35);
 }
+.page.boys-theme {
+  background-color: transparent;
+  color: #e2e8f0;
+}
+
+.page.boys-theme .hero {
+  background: linear-gradient(135deg, rgba(19, 29, 53, 0.95), rgba(30, 41, 59, 0.85));
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+.page.boys-theme .panel {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(148, 163, 184, 0.1);
+  color: #e2e8f0;
+}
+
+.page.boys-theme .panel.soft {
+  background: rgba(23, 33, 54, 0.8);
+}
+
+.page.boys-theme .tagline {
+  background: rgba(31, 41, 55, 0.8);
+  color: #cbd5f5;
+}
+
+.page.boys-theme .script-accent {
+  color: #fef3c7;
+}
+
+.page.boys-theme .primary-button {
+  background: linear-gradient(120deg, #0cbaba, #380036);
+  box-shadow: 0 12px 30px -14px rgba(15, 23, 42, 0.8);
+}
+
+.page.boys-theme .ghost-button {
+  border-color: rgba(148, 163, 184, 0.4);
+  background: rgba(15, 23, 42, 0.6);
+  color: #e2e8f0;
+}
+
+.page.boys-theme .hero .eyebrow,
+.page.boys-theme .eyebrow {
+  color: #cbd5f5;
+}
+
+.page.boys-theme .label,
+.page.boys-theme .muted {
+  color: #cbd5f5;
+}
+
+.page.boys-theme .pill {
+  background: rgba(236, 255, 255, 0.12);
+  color: #f8fafc;
+}
+
+.page.boys-theme .crew-copy p,
+.page.boys-theme .hero-blurb,
+.page.boys-theme .detail-copy p,
+.page.boys-theme .qr-note,
+.page.boys-theme .cta-copy p {
+  color: #e2e8f0;
+}
+
+.page.boys-theme .crew-card,
+.page.boys-theme .bride-card,
+.page.boys-theme .itinerary-card {
+  background: rgba(15, 23, 42, 0.85);
+  border-color: rgba(148, 163, 184, 0.15);
+}
+
+.page.boys-theme .qr-card {
+  background: rgba(31, 41, 55, 0.85);
+  border-color: rgba(148, 163, 184, 0.2);
+}
+
+body.boys-body {
+  background-color: #0b1120;
+  color: #e2e8f0;
+}
+.boys-button {
+  border-color: #1f2a37;
+  color: #1f2a37;
+  background: rgba(31, 42, 55, 0.08);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.boys-button:hover {
+  border-color: #111827;
+  color: #fff;
+  background: #111827;
+}
 
 .qr-card {
   background: #fff;
@@ -647,4 +739,7 @@
 .status-pill.past {
   background: #f0e1f5;
   color: #4e2966;
+}
+.page.boys-theme .script-accent {
+  color: #fef3c7;
 }

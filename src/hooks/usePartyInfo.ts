@@ -149,11 +149,25 @@ const usePartyInfo = (eventSlug = DEFAULT_EVENT_SLUG) => {
             payload.meta.highlights ??
             fallbackPartyInfo.highlights
           const contributionLinks = normalizeContributionLinks(payload.meta.drinkLinks)
+          let themeVariant = fallbackPartyInfo.theme
+          let themeTagline = payload.meta.themeTagline ?? fallbackPartyInfo.themeTagline ?? fallbackPartyInfo.theme
+
+          if (typeof payload.meta.theme === 'string') {
+            const normalizedTheme = payload.meta.theme.toLowerCase()
+            if (normalizedTheme === 'boys' || normalizedTheme === 'ladies') {
+              themeVariant = normalizedTheme
+            } else {
+              themeTagline = payload.meta.theme
+            }
+          }
+
           const mergedMeta: PartyInfo = {
             ...fallbackPartyInfo,
             ...payload.meta,
             highlights,
             contributionLinks,
+            theme: themeVariant,
+            themeTagline,
           }
           setPartyInfo(mergedMeta)
           setStatusLabel(computeEventStatus(mergedMeta.dates))
