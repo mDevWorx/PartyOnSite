@@ -224,6 +224,22 @@ const Home = () => {
         </button>
       </section>
 
+      {partyInfo.coEvent ? (
+        <section className="panel soft">
+          <p className="eyebrow">What about the boys?</p>
+          <h2>Peep the bachelor plans</h2>
+          <p>
+            The guys have their own itinerary brewing. Check out their page for dates, details, and
+            how to send them a round.
+          </p>
+          <div className="cta-buttons">
+            <a className="ghost-button" href={`/events/${partyInfo.coEvent}`}>
+              Visit the boys&apos; page
+            </a>
+          </div>
+        </section>
+      ) : null}
+
       {isQrOpen ? (
         <div className="qr-modal-backdrop" role="dialog" aria-modal="true" aria-label={partyInfo.qrLabel} onClick={closeQrModal}>
           <div className="qr-modal" onClick={(event) => event.stopPropagation()}>

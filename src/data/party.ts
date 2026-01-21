@@ -45,6 +45,7 @@ export const partyInfo = {
   lodging: 'Casa Solara, Palm Springs',
   drinkLink: 'https://example.com/buy-the-bride-a-drink',
   qrLabel: 'Scan to buy the bride a drink',
+  coEvent: null as null | string,
   blurb:
     'Three days of sunshine, sequins, and zero group chat stress. Save the dates and get ready to celebrate Lena with spritzes, dancing, and desert sunsets.',
   highlights: [
